@@ -11,7 +11,7 @@ namespace  AI.UtilityTheory
         public string actionName;
         private float _score;
 
-        public float score
+        public float Score
         {
             get { return _score; }
             set { this._score = Mathf.Clamp01(value); }
@@ -21,7 +21,7 @@ namespace  AI.UtilityTheory
 
         public void Awake()
         {
-            score = 0;
+            Score = 0;
         }
 
         public abstract void Execute();

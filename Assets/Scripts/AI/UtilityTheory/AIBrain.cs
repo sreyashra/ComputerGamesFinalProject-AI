@@ -32,7 +32,7 @@ namespace  AI.UtilityTheory
                 if (ScoreAction(actionsAvailable[i]) > score)
                 {
                     nextBestActionIndex = i;
-                    score = actionsAvailable[i].score;
+                    score = actionsAvailable[i].Score;
                 }
             }
 
@@ -50,8 +50,8 @@ namespace  AI.UtilityTheory
 
                 if (score ==0)
                 {
-                    action.score = 0;
-                    return action.score;
+                    action.Score = 0;
+                    return action.Score;
                 }
             }
             
@@ -59,9 +59,9 @@ namespace  AI.UtilityTheory
             float originalScore = score;
             float modFactor = 1 - (1 / action.considerations.Length);
             float makeupValue = (1 - originalScore) * modFactor;
-            action.score = originalScore + (makeupValue * originalScore);
+            action.Score = originalScore + (makeupValue * originalScore);
 
-            return action.score;
+            return action.Score;
         }
     }
 }
