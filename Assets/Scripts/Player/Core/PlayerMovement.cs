@@ -12,6 +12,12 @@ namespace Player.Core
         private Animator _animator;
         private PlayerInputActions _input;
         private CharacterController _characterController;
+        private Collider _rightHandCollider;
+        private Collider _leftHandCollider;
+        private Collider _rightElbowCollider;
+        private Collider _leftElbowCollider;
+        private Collider _leftFootCollider;
+        private Collider _rightFootCollider;
         
         //Variables to store optimized getter/setter parameter ID
         private int _isPunchingHash;
@@ -27,6 +33,7 @@ namespace Player.Core
         private Vector3 _currentMovement;
         private bool _isMovementPressed;
         private bool _isBlocking;
+        private bool _canAttack;
 
         private void Awake()
         {
@@ -48,6 +55,13 @@ namespace Player.Core
         {
             _characterController = GetComponent<CharacterController>();
             _animator = GetComponent<Animator>();
+            _rightHandCollider = GameObject.FindGameObjectWithTag("RightHand").GetComponent<Collider>();
+            _leftHandCollider = GameObject.FindGameObjectWithTag("LeftHand").GetComponent<Collider>();
+            _rightElbowCollider = GameObject.FindGameObjectWithTag("RightElbow").GetComponent<Collider>();
+            _leftElbowCollider = GameObject.FindGameObjectWithTag("LeftElbow").GetComponent<Collider>();
+            _leftFootCollider = GameObject.FindGameObjectWithTag("LeftFoot").GetComponent<Collider>();
+            _rightFootCollider = GameObject.FindGameObjectWithTag("RightFoot").GetComponent<Collider>();
+            
             _isPunchingHash = Animator.StringToHash("Punching");
             _isKickingHash = Animator.StringToHash("Kicking");
             _isWalkingHash = Animator.StringToHash("Walking");
@@ -55,6 +69,9 @@ namespace Player.Core
             _specialMove2Hash = Animator.StringToHash("SpecialMove2");
             _isBlockingHash = Animator.StringToHash("Blocking");
             _isDodgingHash = Animator.StringToHash("Dodging");
+
+            _rightHandCollider.enabled = false;
+            _canAttack = true;
         }
 
         private void Update()
@@ -93,26 +110,47 @@ namespace Player.Core
 
         private void Punch(InputAction.CallbackContext ctx)
         {
-            Debug.Log("Punch");
-            _animator.SetTrigger(_isPunchingHash);
+            if (_canAttack)
+            {
+                Debug.Log("Punch");
+                _animator.SetTrigger(_isPunchingHash);
+                _rightHandCollider.enabled = true;
+                _canAttack = false;
+            }
         }
 
         private void Kick(InputAction.CallbackContext ctx)
         {
-            Debug.Log("Kick");
-            _animator.SetTrigger(_isKickingHash);
+            if (_canAttack)
+            {
+                Debug.Log("Kick");
+                _animator.SetTrigger(_isKickingHash);
+                _rightFootCollider.enabled = true;
+                _leftFootCollider.enabled = true;
+                _canAttack = false;
+            }
         }
 
         private void SpecialMove1(InputAction.CallbackContext ctx)
         {
-            Debug.Log("Special Move 1");
-            _animator.SetTrigger(_specialMove1Hash);
+            if (_canAttack)
+            {
+                Debug.Log("Special Move 1");
+                _animator.SetTrigger(_specialMove1Hash);
+                _rightHandCollider.enabled = true;
+                _canAttack = false;
+            }
         }
 
         private void SpecialMove2(InputAction.CallbackContext ctx)
         {
-            Debug.Log("Special Move 2");
-            _animator.SetTrigger(_specialMove2Hash);
+            if (_canAttack)
+            {
+                Debug.Log("Special Move 2");
+                _animator.SetTrigger(_specialMove2Hash);
+                _rightElbowCollider.enabled = true;
+                _canAttack = false;
+            }
         }
 
         private void Block(InputAction.CallbackContext ctx)
@@ -132,6 +170,21 @@ namespace Player.Core
         {
             Debug.Log("Dodge");
             _animator.SetTrigger(_isDodgingHash);
+        }
+
+        void AttackColliderDisable()
+        {
+            _rightHandCollider.enabled = false;
+            _leftHandCollider.enabled = false;
+            _rightElbowCollider.enabled = false;
+            _leftElbowCollider.enabled = false;
+            _rightFootCollider.enabled = false;
+            _leftFootCollider.enabled = false;
+        }
+
+        void CanAttack()
+        {
+            _canAttack = true;
         }
 
         #region Enable and Disable Methods
