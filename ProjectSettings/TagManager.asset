@@ -11,6 +11,13 @@ TagManager:
   - RightElbow
   - LeftElbow
   - Torso
+  - E_RightHand
+  - E_LeftHand
+  - E_RightFoot
+  - E_LeftFoot
+  - E_RightElbow
+  - E_LeftElbow
+  - E_Torso
   layers:
   - Default
   - TransparentFX
