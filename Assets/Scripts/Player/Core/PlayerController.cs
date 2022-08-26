@@ -228,7 +228,7 @@ namespace Player.Core
         {
             if (other.gameObject.TryGetComponent<AiController>(out AiController aiController))
             {
-                Debug.Log("ifjijw");
+                Debug.Log("Hit");
                 aiController.TakeDamage(_stats.DamagePower);
             }
         }
