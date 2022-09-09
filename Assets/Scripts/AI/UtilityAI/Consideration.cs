@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using AI.Core;
 using UnityEngine;
 
 namespace AI.UtilityAI
@@ -20,6 +21,6 @@ namespace AI.UtilityAI
             Score = 0;
         }
 
-        public abstract float ScoreConsideration();
+        public abstract float ScoreConsideration(AiController aiController);
     }
 }

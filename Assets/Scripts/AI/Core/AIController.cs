@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using AI.UtilityAI;
+using Unity.VisualScripting;
 using Action = AI.UtilityAI.Action;
 
 namespace AI.Core
@@ -11,7 +12,7 @@ namespace AI.Core
     public class AiController : MonoBehaviour
     {
         private Animator _animator;
-        private Stats _stats;
+        public Stats stats { get; set; }
         public MoveController MoveController { get; set; }
         public AiBrain AiBrain { get; set; }
         public Action[] actionsAvailable;
@@ -33,13 +34,27 @@ namespace AI.Core
 
         private bool _isBlocking;
         private float _damagePower;
+        private bool _canAttack;
+        private bool _targetInRange;
 
+        public bool CanAttack
+        {
+            get { return _canAttack; }
+            set { _canAttack = value; }
+        }
+
+        public bool TargetInRange
+        {
+            get { return _targetInRange; }
+            set { _targetInRange = value; }
+        }
+        
         private void Start()
         {
             MoveController = GetComponent<MoveController>();
             AiBrain = GetComponent<AiBrain>();
             _animator = GetComponent<Animator>();
-            _stats = GetComponent<Stats>();
+            stats = GetComponent<Stats>();
             
             //Set Collider components to variables
             _rightHandCollider = GameObject.FindGameObjectWithTag("E_RightHand").GetComponent<Collider>();
@@ -62,9 +77,9 @@ namespace AI.Core
         private void Update()
         {
             HandleAnimations();
-            if (AiBrain.finishedDeciding)
+            if (AiBrain.FinishedDeciding)
             {
-                AiBrain.finishedDeciding = false;
+                AiBrain.FinishedDeciding = false;
                 AiBrain.BestAction.Execute(this);
             }
         }
@@ -130,26 +145,26 @@ namespace AI.Core
 
         public void TakeDamage(float damageAmount)
         {
-            Debug.Log(_stats.Health);
+            Debug.Log(stats.Health);
             switch (damageAmount, _isBlocking)
             {
                 case (5, false):
-                    _stats.Health -= damageAmount;
+                    stats.Health -= damageAmount;
                     break;
                 case (5, true):
-                    _stats.Health = _stats.Health;
+                    stats.Health = stats.Health;
                     break;
                 case(10, false):
-                    _stats.Health -= damageAmount;
+                    stats.Health -= damageAmount;
                     break;
                 case(10, true):
-                    _stats.Health -= damageAmount * 25 / 100;
+                    stats.Health -= damageAmount * 25 / 100;
                     break;
                 case (15, false):
-                    _stats.Health -= damageAmount;
+                    stats.Health -= damageAmount;
                     break;
                 case (15, true):
-                    _stats.Health -= damageAmount * 75 / 100;
+                    stats.Health -= damageAmount * 75 / 100;
                     break;
             }
         }

@@ -10,7 +10,7 @@ namespace AI.UtilityAI
     {
         private AiController _aiController;
         public Action BestAction { get; set; }
-        public bool finishedDeciding { get; set; }
+        public bool FinishedDeciding { get; set; }
 
         private void Start()
         {
@@ -39,7 +39,7 @@ namespace AI.UtilityAI
             }
 
             BestAction = actionsAvailable[nextBestActionIndex];
-            finishedDeciding = true;
+            FinishedDeciding = true;
         }
 
         public float ScoreAction(Action action)
@@ -47,7 +47,7 @@ namespace AI.UtilityAI
             float score = 1f;
             for (int i = 0; i < action.considerations.Length; i++)
             {
-                float considerationScore = action.considerations[i].ScoreConsideration();
+                float considerationScore = action.considerations[i].ScoreConsideration(_aiController);
                 score *= considerationScore;
 
                 if (score == 0)
@@ -58,10 +58,10 @@ namespace AI.UtilityAI
             }
             
             //Average overall score
-            /*float originalScore = score;
+            float originalScore = score;
             float modificationFactor = 1 - (1 / action.considerations.Length);
             float makeUpValue = (1 - originalScore) * modificationFactor;
-            action.Score = originalScore + (makeUpValue * originalScore);*/
+            action.Score = originalScore + (makeUpValue * originalScore);
 
             return action.Score;
         }

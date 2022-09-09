@@ -121,6 +121,7 @@ namespace Player.Core
                 Debug.Log(_stats.DamagePower);
                 _animator.SetTrigger(_isPunchingHash);
                 _rightHandCollider.enabled = true;
+                _leftHandCollider.enabled = true;
                 _canAttack = false;
             }
         }
